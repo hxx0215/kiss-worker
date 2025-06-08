@@ -67,7 +67,7 @@ export default {
     }
 
     const { pathname, searchParams } = new URL(request.url);
-    if (request.method === "POST" && pathname === "/sync") {
+    if (request.method === "POST" && (pathname === "/sync" || pathname==="/force/sync") {
       const expectPsk = `Bearer ${await sha256(AUTH_VALUE, KV_SALT_SYNC)}`;
       const psk = request.headers.get("Authorization");
       if (psk !== expectPsk) {
@@ -78,7 +78,7 @@ export default {
 
       try {
         let data = await request.json();
-        // console.log("data", data);
+        console.log("data", data);
         if (
           !(
             data.hasOwnProperty("key") &&
@@ -93,7 +93,14 @@ export default {
 
         const { value, metadata } = await KV.getWithMetadata(data.key);
         // console.log("kv", value, metadata);
-        if (value && metadata?.updateAt >= data.updateAt) {
+        if (pathname === "/force/sync"){
+          data.updateAt = Date.now();
+          await KV.put(data.key, data.value, {
+            metadata: {
+              updateAt: data.updateAt,
+            },
+          });
+        } else if (value && metadata?.updateAt >= data.updateAt) {
           data = {
             key: data.key,
             value,

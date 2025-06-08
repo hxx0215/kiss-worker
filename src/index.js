@@ -67,7 +67,7 @@ export default {
     }
 
     const { pathname, searchParams } = new URL(request.url);
-    if (request.method === "POST" && (pathname === "/sync" || pathname==="/force/sync") {
+    if (request.method === "POST" && (pathname === "/sync" || pathname==="/force/sync")) {
       const expectPsk = `Bearer ${await sha256(AUTH_VALUE, KV_SALT_SYNC)}`;
       const psk = request.headers.get("Authorization");
       if (psk !== expectPsk) {

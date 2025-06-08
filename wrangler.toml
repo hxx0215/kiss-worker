@@ -4,3 +4,6 @@ compatibility_date = "2023-07-28"
 kv_namespaces = [
     { binding = "KV", id = "cb9ff2df8b814516bbb0d9a0bd6e5bf8", preview_id = "cb9ff2df8b814516bbb0d9a0bd6e5bf8" }
 ]
+[observability]
+enabled = true
+head_sampling_rate = 1
